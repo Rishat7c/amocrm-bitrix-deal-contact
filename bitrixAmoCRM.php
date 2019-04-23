@@ -11,16 +11,6 @@ if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 class bitrixAmoCRM
 {
 
-    // Данные
-    public $responsible_user_id =   3435217; //id ответственного по сделке, контакту, компании
-
-    public $lead_name           =   'Заявка с сайта'; //Наименование добавляемой сделки
-    public $lead_status_id      =   '11331793'; //id этапа продаж, куда помещать сделку
-
-    public $contact_name        =   "Ivanov Ivan Ivanovich"; //Наименование добавляемого контакта
-    public $contact_phone       =   "89999999999"; //Телефон контакта
-    public $contact_email       =   "admin@mail.ru"; //Емейл контакта
-
     public $user = array(
         'USER_LOGIN'            =>  '#email#', // Ваш email адрес от amocrm.ru
         'USER_HASH'             =>  '#token#' // // Ваш API токен от amocrm.ru
@@ -93,27 +83,24 @@ class bitrixAmoCRM
 
         }
 
-        $this->addDeal();
-        $this->addContact();
-
     }
 
-    function addDeal()
+    function addDeal($lead_name = "Заявка с сайта", $lead_status_id = "11331793", $responsible_user_id = 3435217)
     {
         // Добавляем сделку
         $leads['request']['leads']['add']=array(
             array(
-                'name'                  => $this->lead_name,
-                'status_id'             => $this->lead_status_id, //id статуса
-                'responsible_user_id'   => $this->responsible_user_id, //id ответственного по сделке
+                'name'                  => $lead_name,
+                'status_id'             => $lead_status_id, //id статуса
+                'responsible_user_id'   => $responsible_user_id, //id ответственного по сделке
                 //'date_create'=>1298904164, //optional
                 //'price'=>300000,
-                //'tags' => 'Important, USA', //Теги
+                //'tags' => 'Important, USA', #Теги
                 //'custom_fields'=>array()
             )
         );
 
-        $link='https://'.$this->subdomain.'.amocrm.ru/private/api/v2/json/leads/set';
+        $link='https://'. $this->subdomain .'.amocrm.ru/private/api/v2/json/leads/set';
         $curl=curl_init(); // Сохраняем дескриптор сеанса cURL
         // Устанавливаем необходимые опции для сеанса cURL
         curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
@@ -138,20 +125,20 @@ class bitrixAmoCRM
         }
     }
 
-    function addContact()
+    function addContact($contact_name, $contact_phone, $contact_email, $responsible_user_id = 3435217)
     {
 
         // Добавление контакта
         $contact = array(
-            'name' => $this->contact_name,
+            'name' => $contact_name,
             'linked_leads_id' => array($this->lead_id), //id сделки
-            'responsible_user_id' => $this->responsible_user_id, //id ответственного
+            'responsible_user_id' => $responsible_user_id, //id ответственного
             'custom_fields'=>array(
                 array(
                     'id' => $this->sFields['PHONE'],
                     'values' => array(
                         array(
-                            'value' => $this->contact_phone,
+                            'value' => $contact_phone,
                             'enum' => 'MOB'
                         )
                     )
@@ -160,7 +147,7 @@ class bitrixAmoCRM
                     'id' => $this->sFields['EMAIL'],
                     'values' => array(
                         array(
-                            'value' => $this->contact_email,
+                            'value' => $contact_email,
                             'enum' => 'WORK'
                         )
                     )
@@ -171,7 +158,7 @@ class bitrixAmoCRM
 
         // Формируем ссылку для запроса
         $link='https://'.$this->subdomain.'.amocrm.ru/private/api/v2/json/contacts/set';
-        $curl=curl_init(); // Сохраняем дескриптор сеанса cURL
+        $curl=curl_init(); #Сохраняем дескриптор сеанса cURL
         // Устанавливаем необходимые опции для сеанса cURL
         curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
         curl_setopt($curl,CURLOPT_USERAGENT,'amoCRM-API-client/1.0');

@@ -9,11 +9,16 @@
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("rest AmoCrm");
 
-// TODO: $ob = new bitrixAmoCRM("Гайсин Ришат Радисович", "89518950743", "xpan96@gmail.com");
 $ob = new bitrixAmoCRM();
 
-if($ob) {
+$deal = $ob->addDeal();
+$contact = $ob->addContact(
+    "Гайсин Ришат Радисович",
+    "89518950743",
+    "xpan96@gmail.com"
+);
+
+if($deal and $contact)
     echo "Запись добавлена в AmoCRM";
-}
 
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
