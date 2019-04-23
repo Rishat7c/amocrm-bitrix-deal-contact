@@ -20,7 +20,6 @@ class bitrixAmoCRM
     public $sFields             =   array();
     public $lead_id             =   null;
 
-    // TODO: function __construct($contact_name = "Ivanov Ivan Ivanovich", $contact_phone = "89999999999", $contact_email = "admin@mail.ru")
     function __construct()
     {
 
