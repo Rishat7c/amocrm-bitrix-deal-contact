@@ -14,10 +14,10 @@ class bitrixAmoCRM
     // Данные
     public $responsible_user_id =   3435217; //id ответственного по сделке, контакту, компании
 
-    public $lead_name           =   'Заявка с сайта'; //Название добавляемой сделки
+    public $lead_name           =   'Заявка с сайта'; //Наименование добавляемой сделки
     public $lead_status_id      =   '11331793'; //id этапа продаж, куда помещать сделку
 
-    public $contact_name        =   "Ivanov Ivan Ivanovich"; //Название добавляемого контакта
+    public $contact_name        =   "Ivanov Ivan Ivanovich"; //Наименование добавляемого контакта
     public $contact_phone       =   "89999999999"; //Телефон контакта
     public $contact_email       =   "admin@mail.ru"; //Емейл контакта
 
@@ -108,7 +108,7 @@ class bitrixAmoCRM
                 'responsible_user_id'   => $this->responsible_user_id, //id ответственного по сделке
                 //'date_create'=>1298904164, //optional
                 //'price'=>300000,
-                //'tags' => 'Important, USA', #Теги
+                //'tags' => 'Important, USA', //Теги
                 //'custom_fields'=>array()
             )
         );
@@ -171,7 +171,7 @@ class bitrixAmoCRM
 
         // Формируем ссылку для запроса
         $link='https://'.$this->subdomain.'.amocrm.ru/private/api/v2/json/contacts/set';
-        $curl=curl_init(); #Сохраняем дескриптор сеанса cURL
+        $curl=curl_init(); // Сохраняем дескриптор сеанса cURL
         // Устанавливаем необходимые опции для сеанса cURL
         curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
         curl_setopt($curl,CURLOPT_USERAGENT,'amoCRM-API-client/1.0');
