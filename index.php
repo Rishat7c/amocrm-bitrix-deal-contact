@@ -11,14 +11,19 @@ $APPLICATION->SetTitle("rest AmoCrm");
 
 $ob = new bitrixAmoCRM();
 
-$deal = $ob->addDeal();
-$contact = $ob->addContact(
-    "Гайсин Ришат Радисович",
-    "89518950743",
-    "xpan96@gmail.com"
-);
+if($dealID = $ob->addDeal()) {
 
-if($deal and $contact)
-    echo "Запись добавлена в AmoCRM";
+    $contact = $ob->addContact(
+        "Гайсин Ришат Радисович",
+        "89518950743",
+        "xpan96@gmail.com",
+        $dealID
+    );
+
+    if($contactID = $contact) {
+        echo "Запись добавлена в AmoCRM (contact id = $contactID, deal id = $dealID)";
+    }
+
+}
 
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

@@ -17,8 +17,8 @@ class bitrixAmoCRM
     );
 
     public $subdomain           =   '#subdomain#'; // Ваш subdomain от amocrm.ru (Пример: subdomain.amocrm.ru)
-    public $sFields             =   array();
-    public $lead_id             =   null;
+    public $sFields             =   array(); // Поля из amocrm.ru
+    public $responsible_user_id =   3435217; // ID пользователя добавляющего запись в amocrm
 
     function __construct()
     {
@@ -84,14 +84,16 @@ class bitrixAmoCRM
 
     }
 
-    function addDeal($lead_name = "Заявка с сайта", $lead_status_id = "11331793", $responsible_user_id = 3435217)
+    function addDeal($lead_name = "Заявка с сайта", $lead_status_id = "11331793")
     {
+        $lead_id = null;
+
         // Добавляем сделку
         $leads['request']['leads']['add']=array(
             array(
                 'name'                  => $lead_name,
                 'status_id'             => $lead_status_id, //id статуса
-                'responsible_user_id'   => $responsible_user_id, //id ответственного по сделке
+                'responsible_user_id'   => $this->responsible_user_id, //id ответственного по сделке
                 //'date_create'=>1298904164, //optional
                 //'price'=>300000,
                 //'tags' => 'Important, USA', #Теги
@@ -119,19 +121,23 @@ class bitrixAmoCRM
 
         if(is_array($Response['response']['leads']['add'])) {
             foreach ($Response['response']['leads']['add'] as $lead) {
-                $this->lead_id = $lead["id"]; //id новой сделки
+                $lead_id = $lead["id"]; //id новой сделки
             };
         }
+
+        return $lead_id;
     }
 
-    function addContact($contact_name, $contact_phone, $contact_email, $responsible_user_id = 3435217)
+    function addContact($contact_name, $contact_phone, $contact_email, $lead_id)
     {
+
+        $contact_id = null;
 
         // Добавление контакта
         $contact = array(
             'name' => $contact_name,
-            'linked_leads_id' => array($this->lead_id), //id сделки
-            'responsible_user_id' => $responsible_user_id, //id ответственного
+            'linked_leads_id' => array($lead_id), //id сделки
+            'responsible_user_id' => $this->responsible_user_id, //id ответственного
             'custom_fields'=>array(
                 array(
                     'id' => $this->sFields['PHONE'],
@@ -174,6 +180,14 @@ class bitrixAmoCRM
         $code=curl_getinfo($curl,CURLINFO_HTTP_CODE);
 
         $Response=json_decode($out,true);
+
+        if(is_array($Response['response']['contacts']['add'])) {
+            foreach ($Response['response']['contacts']['add'] as $contactInfo) {
+                $contact_id = $contactInfo["id"];
+            };
+        }
+
+        return $contact_id;
 
     }
 
